@@ -1,0 +1,38 @@
+lasticsearch-rtf 启动elasticsearch失败，org.elasticsearch.bootstrap.StartupException: java.lang.IllegalStateException: No match found
+初步解决：elasticsearch5.1.1.jar中的org/elasticsearch/monitor/os中的OsProbe.class用elasticsearch5.6.1.jar中的OsProbe.class来替换
+替换后启动elasticsearch直接系统卡死，查看内存使用情况，初步估计电脑内存不足导致。
+
+
+安装MySQL并初始化后，生成root账号的随机密码，网上查阅修改相关资料，发现基本已经无法使用，查阅良久之后发现之前的密码修改方式在MySQL8.0已经不再适用，查阅最新的文档修改root密码成功。
+
+
+买来内存条电脑不兼容，增加SWAP8G，卡死现象有所缓解。
+
+
+初始化Elasticsearch一直报elasticsearch_dsl.exceptions.IllegalOperation: Index object cannot have multiple types, doc already set, trying to assign article.异常，查阅相关资料，发现Elasticsearch-dsl6.X版本会出现此BUG，卸载6.X版本，重新安装elasticsearch5.2版本，elasticsearch-dsl5.1版本后正常。
+
+
+爬虫无法将数据保存到elasticsearch中，检查后发现ES_Type中save写错。
+
+
+elasticsearch-head可视化界面无法连接到本地集群，重新配置elasticsearch.yml，设置可访问IP后启动异常，ElasticsearchParseException[malformed, expected settings to start with 'object', instead was [VALUE_STRING]]，查阅多方资料，发现yml的格式为name: opt，冒号之后存在一个空格。
+
+
+添加IK分词器，配置自定义字典后启动elasticsearch不加载，只有在使用过一次之后才加载。
+
+
+配置部署Elasticsearch到阿里云服务器，添加规则，开启防火墙，添加9200端口，设置JVM内存为1g，
+报错ERROR: [2] bootstrap checks failed
+[1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
+[2]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+
+[1]修改/etc/security/limits.conf在最后添加
+* soft nofile 65536
+* hard nofile 131072
+
+[2]修改/etc/sysctl.conf 在最后添加
+vm.max_map_count=655360
+
+Elasticsearch5.x中调用分词器方式改变，result= es.indices.analyze(index=index,body={'text':text,'analyzer':"ik_max_word"}, params={'filter':["lowercase"]} )，导致解析text错误。
+
+代码编写错误，变量使用错误。
