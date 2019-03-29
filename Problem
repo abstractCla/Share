@@ -36,3 +36,7 @@ vm.max_map_count=655360
 Elasticsearch5.x中调用分词器方式改变，result= es.indices.analyze(index=index,body={'text':text,'analyzer':"ik_max_word"}, params={'filter':["lowercase"]} )，导致解析text错误。
 
 代码编写错误，变量使用错误。
+
+MySQL启动错误,报错如下.
+mysqld: error while loading shared libraries: libprotobuf-lite.so.17: cannot open shared object file: No such file or directory
+升级过系统,本地libprotobuf-lite.so.17升级为libprotobuf-lite.so.18,故报错!
