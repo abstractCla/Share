@@ -46,3 +46,7 @@ mysqld: error while loading shared libraries: libprotobuf-lite.so.17: cannot ope
 1.远程访问elasticsearch,elasticsearch-head,kibana的安全性加密.
 2.爬虫信息实时性(设置定时任务进行爬虫),但是在保证实时性的同时处理去重问题.
 3.前端页面开发.
+
+
+使用crontab设置开机自启动elasticsearch,elasticsearch-head,kibana.
+crontab中没有环境变量,导致命令执行错误,需要执行命令的绝对路径,启动elasticsearch一直报错,是因为没有JAVA的环境变量,在shell脚本中增加系统环境变量和JAVA环境变量
