@@ -40,3 +40,9 @@ Elasticsearch5.x中调用分词器方式改变，result= es.indices.analyze(inde
 MySQL启动错误,报错如下.
 mysqld: error while loading shared libraries: libprotobuf-lite.so.17: cannot open shared object file: No such file or directory
 升级过系统,本地libprotobuf-lite.so.17升级为libprotobuf-lite.so.18,故报错!
+
+
+待解决的三个问题:
+1.远程访问elasticsearch,elasticsearch-head,kibana的安全性加密.
+2.爬虫信息实时性(设置定时任务进行爬虫),但是在保证实时性的同时处理去重问题.
+3.前端页面开发.
