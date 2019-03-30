@@ -43,3 +43,53 @@ routing值默认是文档的_id的值，也可以手动指定一个值，手动�
 
  3.20 分页查询中的deep paging问题 ,深度越深,性能越低
 
+42.计算相关度分数
+使用的是TF/IDF算法(Term Frequency&Inverse Document Frequency)
+
+1.Term Frequency:我们查询的文本中的词条在document本中出现了多少次，出现次数越多，相关度越高
+
+搜索内容： hello world
+
+Hello，I love china.
+
+Hello world,how are you!
+
+2.Inverse Document  Frequency：我们查询的文本中的词条在索引的所有文档中出现了多少次，出现的次数越多，相关度越低
+
+搜索内容：hello world
+
+hello，what are you doing?
+
+I like the world.
+
+hello 在索引的所有文档中出现了500次，world出现了100次
+
+3.Field-length(字段长度归约) norm:field越长，相关度越低
+
+搜索内容：hello world
+
+{"title":"hello,what's your name?","content":{"owieurowieuolsdjflk"}}
+
+{"title":"hi,good morning","content":{"lkjkljkj.......world"}}
+
+查看分数是如何计算的：
+
+GET /lib3/user/_search?explain=true
+{
+    "query":{
+        "match":{
+            "interests": "duanlian,changge"
+        }
+    }
+}
+
+查看一个文档能否匹配上某个查询：
+
+GET /lib3/user/2/_explain
+{
+    "query":{
+        "match":{
+            "interests": "duanlian,changge"
+        }
+    }
+}
