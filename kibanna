@@ -1,0 +1,212 @@
+GET _search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+PUT /mytest/
+{
+  "settings":{
+      "index":{
+        "number_of_shards": 5,
+        "number_of_replicas": 0
+        }
+      }
+}
+
+GET /mytest/_settings
+GET _all/_settings
+
+
+PUT /mytest/user/1
+{
+    "first_name" :  "Jane",
+    "about" :       "I like to collect rock albums",
+    "interests":  [ "music" ]
+}
+POST /mytest/user/1/_update
+{
+  "doc":{
+      "age":33
+      }
+}
+POST /mytest/user/
+{
+    "first_name" :  "Douglas",
+    "last_name" :   "Fir",
+    "age" :         23,
+    "about":        "I like to build cabinets",
+    "interests":  [ "forestry" ]
+}
+
+
+GET /mytest/user/1?_source=age,interests
+
+PUT /mytest/user/1
+{
+    "first_name" :  "Jane",
+    "last_name" :   "Smith",
+    "age" :         36,
+    "about" :       "I like to collect rock albums",
+    "interests":  [ "music" ]
+}
+
+DELETE /mytest/user/1
+
+GET /_mget
+{
+    "docs":[
+       {
+           "_index": "mytest",
+           "_type": "user",
+           "_id": 1
+       },
+       {
+           "_index": "mytest",
+           "_type": "user",
+           "_id": 2
+       },
+       {
+           "_index": "mytest",
+           "_type": "user",
+           "_id": 3
+       }
+     ]
+}
+
+GET /_mget
+{
+    "docs":[
+       
+       {
+           "_index": "mytest",
+           "_type": "user",
+           "_id": 1,
+           "_source": "interests"
+       },
+       {
+           "_index": "lib",
+           "_type": "mytest",
+           "_id": 2,
+           "_source": ["age","interests"]
+       }
+       
+     ]
+}
+
+
+
+
+PUT  library
+
+
+POST /library/books/_bulk
+{"index":{"_id":1}}
+{"title":"Java","price":55}
+{"index":{"_id":2}}
+{"title":"Html5","price":45}
+{"index":{"_id":3}}
+{"title":"Php","price":35}
+{"index":{"_id":4}}
+{"title":"Python","price":50}
+
+
+
+PUT /myindex/article/1 
+{ 
+  "post_date": "2018-05-10", 
+  "title": "Java", 
+  "content": "java is the best language", 
+  "author_id": 119
+}
+
+PUT /myindex/article/2
+{ 
+  "post_date": "2018-05-12", 
+  "title": "html", 
+  "content": "I like html", 
+  "author_id": 120
+}
+
+PUT /myindex/article/3
+{ 
+  "post_date": "2018-05-16", 
+  "title": "es", 
+  "content": "Es is distributed document store", 
+  "author_id": 110
+}
+
+GET /myindex/article/_search?q=2018-05
+
+GET /myindex/article/_search?q=2018-05-10
+
+GET /myindex/article/_search?q=html
+
+GET /myindex/article/_search?q=java
+
+GET /xidian/news/_search/
+{
+  "query":{
+    "term":{"title":"国家"}
+  }
+}
+
+GET /xidian/news/_search/
+{
+  "query":{
+    "terms":{"content":["国家","西电"]}
+  },
+  "from":0,
+  "size":10
+}
+
+GET /xidian/news/_search/
+{
+  "_source": ["title"],
+  "query":{
+    "match":{"content":"国家西电"}
+  },
+  "from":0,
+  "size":10
+}
+
+GET _cat/health
+
+
+GET /xidian/news/_search?explain=true
+{
+  "_source": ["title"], 
+    "query":{
+        "match":{
+          "title": "西电"
+        }
+    }
+}
+
+GET /xidian/news/_search
+{
+    "query":{
+      "multi_match":{
+        "query":"西安交通大学",
+        "fields":[ "title", "content"]
+      }
+    },
+    "size": 100
+}
+
+
+GET /xidian/news/_search?scroll=1m
+{
+  "query": {
+    "match_all": {}
+  },
+  "sort":["_doc"],
+  "size":10
+}
+
+GET /_search/scroll
+{
+   "scroll": "1m",
+     "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAAAG_oFkoyUjJmbGhJUU02X0hPTlVaM3ltRHcAAAAAAABv7BZKMlIyZmxoSVFNNl9IT05VWjN5bUR3AAAAAAAAb-kWSjJSMmZsaElRTTZfSE9OVVozeW1EdwAAAAAAAG_qFkoyUjJmbGhJUU02X0hPTlVaM3ltRHcAAAAAAABv6xZKMlIyZmxoSVFNNl9IT05VWjN5bUR3"
+}
